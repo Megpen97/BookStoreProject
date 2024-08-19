@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "react-router-dom": "^6.26.1",
     "string-strip-html": "^8.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
