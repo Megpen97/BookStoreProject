@@ -1,37 +1,34 @@
-import axios from 'axios';  
-import { Book } from '../types/DataTypes';  
+import axios from "axios";  
+import { User } from '../types/users';  
 
 class ApiService {  
-  // Base URL for the Google Books API  
-  private static baseURL = 'https://www.googleapis.com/books/v1';  
+  static baseURL = "http://localhost:3000/api"; // Adjust the base URL as necessary  
 
-  /**  
-   * Fetches a book by ID from the Google Books API.  
-   * @param id The ID of the book to fetch.  
-   * @returns A Promise of Book or null if the book is not found.  
-   */  
-  static async fetchBookById(id: string): Promise<Book | null> {  
+  static async validateCredentials(username: string, password: string): Promise<{ isValid: boolean; token?: string }> {  
     try {  
-      const response = await axios.get<Book>(`${this.baseURL}/volumes/${id}`);  
-      return response.data;  
+      const response = await axios.post<{ token: string }>(  
+        `${this.baseURL}/signin`,  // Ensure this matches your actual API endpoint  
+        { username, password }  
+      );  
+      return { isValid: true, token: response.data.token };  // Correctly map the response to the expected format  
     } catch (error) {  
-      console.error('Error fetching book by ID:', error);  
-      return null;  
+      console.error("Error validating credentials:", error);  
+      return { isValid: false };  
     }  
   }  
 
-  /**  
-   * Searches for books matching the given query.  
-   * @param query The search query string.  
-   * @returns A Promise of an array of found books.  
-   */  
-  static async searchBooks(query: string): Promise<Book[]> {  
+  static async getUserByToken(token: string): Promise<User> {  
     try {  
-      const response = await axios.get<{ items: Book[] }>(`${this.baseURL}/volumes?q=${encodeURIComponent(query)}`);  
-      return response.data.items || [];  
+      const response = await axios.get<User>(  
+        `${this.baseURL}/users/me`,  // Suppose you have an endpoint to fetch user details  
+        {  
+          headers: { Authorization: `Bearer ${token}` }  
+        }  
+      );  
+      return response.data;  
     } catch (error) {  
-      console.error('Error searching for books:', error);  
-      return [];  
+      console.error("Error fetching user:", error);  
+      throw error;  
     }  
   }  
 }  

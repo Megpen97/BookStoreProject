@@ -5,7 +5,7 @@ import ApiService from '../api/apiService';
 export interface User {  
   id: string;  
   username: string;  
-  password: string;  
+  password?: string; // Optional if you don't need to expose this  
 }  
 
 // Define the shape of the AuthContext  
@@ -22,15 +22,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);  
 
   const signIn = async (username: string, password: string): Promise<boolean> => {  
-    const fetchedUser = await ApiService.validateCredentials(username, password);  
-    if (fetchedUser) {  
-      setUser(fetchedUser);  
-      return true;  
+    const response = await ApiService.validateCredentials(username, password);  
+    if (response.isValid && response.token) {  
+      try {  
+        // After validation, fetch user details with the token  
+        const userDetails = await ApiService.getUserByToken(response.token);  
+        setUser(userDetails);  
+        localStorage.setItem("authToken", response.token);  
+        return true;  
+      } catch (error) {  
+        console.error("Failed to fetch user details:", error);  
+        return false;  
+      }  
     }  
     return false;  
   };  
 
   const signOut = () => {  
+    localStorage.removeItem("authToken");  
     setUser(null);  
   };  
 

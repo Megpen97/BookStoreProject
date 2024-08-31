@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';  
 import useAuth from '../hooks/useAuth';  
 import DataFetcher from '../utils/DataFetcher';  
-import { DataItem } from '../types/DataTypes.ts';  
+import { Book } from '../types/DataTypes.ts';
 
 const Dashboard: React.FC = () => {  
   const { user, signOut } = useAuth(); // Get authenticated user and signOut function from the useAuth hook  
-  const [data, setData] = useState<DataItem[]>([]);  
+  const [data, setData] = useState<Book[]>([]);  
   const [loading, setLoading] = useState<boolean>(true);  
   const [error, setError] = useState<string | null>(null);  
 
@@ -15,7 +15,9 @@ const Dashboard: React.FC = () => {
         const fetchedData = await DataFetcher.fetchData();  
         setData(fetchedData);  
       } catch (err) {  
-        setError('Error fetching data');  
+        if(err instanceof Error) {
+        setError('Error fetching data: ${err.message}');  
+        }
       } finally {  
         setLoading(false);  
       }  
@@ -39,8 +41,8 @@ const Dashboard: React.FC = () => {
         <ul>  
           {data.map((item) => (  
             <li key={item.id}>  
-              <h3>{item.name}</h3>  
-              <p>{item.description}</p>  
+              {/* <h3>{item.name}</h3>  
+              <p>{item.description}</p>   */}
             </li>  
           ))}  
         </ul>  
