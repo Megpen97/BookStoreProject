@@ -20,7 +20,7 @@ class ApiService {
   static async getUserByToken(token: string): Promise<User> {  
     try {  
       const response = await axios.get<User>(  
-        `${this.baseURL}/users/me`,  // Suppose you have an endpoint to fetch user details  
+        `${this.baseURL}/auth`,  // Suppose you have an endpoint to fetch user details  
         {  
           headers: { Authorization: `Bearer ${token}` }  
         }  

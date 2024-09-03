@@ -15,6 +15,7 @@ export const getUserId = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (err) {
     // TODO log error when authentication is required
+    res.status(401).send({ message: "Unauthorized" });
     next();
   }
 };

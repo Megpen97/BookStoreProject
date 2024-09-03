@@ -15,16 +15,18 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: "http://localhost:3000",
         changeOrigin: true,
+        secure: false,
       },
-      '/events': {
-        target: 'ws://localhost:3000',
+      // For the tic tac toe project
+      "/events": {
+        target: "ws://localhost:3000",
         changeOrigin: true,
         secure: false,
         ws: true,
-      }
-    }
-  }
+      },
+    },
+  },
 });

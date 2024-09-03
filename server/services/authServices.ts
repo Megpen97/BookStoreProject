@@ -21,3 +21,5 @@ export const authenticateUser = async (
 
   return { isValid: false };  
 };
+
+export default { generateAccessToken, authenticateUser }; 
