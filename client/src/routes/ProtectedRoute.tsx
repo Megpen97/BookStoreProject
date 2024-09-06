@@ -1,19 +1,22 @@
-import React from 'react';  
 import { Navigate, useLocation } from 'react-router-dom';  
-import useAuth from '../hooks/useAuth';  
-
+import useAuth from '../hooks/useAuth';
 interface ProtectedRouteProps {  
-  element: JSX.Element;  
+  children: JSX.Element;  
 }  
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {  
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {  
   const { user } = useAuth();  
   const location = useLocation();  
 
-  // If the user is authenticated, render the element  
-  // Otherwise, redirect to the sign-in page, preserving the current location  
+  console.log('User state in ProtectedRoute:', user);  
+
+  if (!user) {  
+    console.log("Not authenticated, redirecting to login");  
+    return <Navigate to="/signin" state={{ from: location }} replace />;  
+  }  
+
   return user ? (  
-    element  
+    children  
   ) : (  
     <Navigate to="/signin" state={{ from: location }} replace />  
   );  

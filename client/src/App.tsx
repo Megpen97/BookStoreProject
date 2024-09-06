@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';  
 import SignIn from './components/SignIn';  
-import Dashboard from './components/Dashboard';  
+import Bookshelf from './components/Bookshelf';   
 import ProtectedRoute from './routes/ProtectedRoute';
 
 const App = () => {  
@@ -8,8 +8,8 @@ const App = () => {
     <Routes>  
       {/* <Route path="/" element={<Dashboard />} />   */}
       <Route path="/signin" element={<SignIn />} />  
-      <Route path="/bookshelf/:userId" element={
-        <ProtectedRoute element={<Dashboard />} />  
+      <Route path="/bookshelf/" element={
+        <ProtectedRoute children={<Bookshelf />} />  
       } /> 
     </Routes>  
   );  

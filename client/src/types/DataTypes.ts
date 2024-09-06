@@ -1,19 +1,24 @@
+export interface Book {  
+  id: string;  
+  shelf: Shelf[];  
+  volumeInfo: VolumeInfo;  
+}  
 export interface IndustryIdentifier {  
   type: string;  
   identifier: string;  
-}  
+}
 
-export interface ReadingModes {  
-  text: boolean;  
-  image: boolean;  
-}  
+export interface ImageLinks {  
+  smallThumbnail?: string;  
+  thumbnail?: string;  
+}
 
-export interface PanelizationSummary {  
-  containsEpubBubbles: boolean;  
-  containsImageBubbles: boolean;  
-}  
+export interface Dimensions {  
+  height: string;  
+  width: string;  
+  thickness: string;  
+}
 
-// Define the structure of the volume information within the book object  
 export interface VolumeInfo {  
   title: string;  
   subtitle?: string;  
@@ -22,7 +27,6 @@ export interface VolumeInfo {
   publishedDate?: string;  
   description?: string;  
   industryIdentifiers?: IndustryIdentifier[];  
-  readingModes?: ReadingModes;  
   pageCount?: number;  
   printedPageCount?: number;  
   printType?: string;  
@@ -30,19 +34,21 @@ export interface VolumeInfo {
   maturityRating?: string;  
   allowAnonLogging?: boolean;  
   contentVersion?: string;  
-  panelizationSummary?: PanelizationSummary;  
-  imageLinks?: {  
-    smallThumbnail?: string;  
-    thumbnail?: string;  
-  };  
+  imageLinks?: ImageLinks;  
   language?: string;  
   previewLink?: string;  
   infoLink?: string;  
   canonicalVolumeLink?: string;  
-}  
+  dimensions?: Dimensions;  
+}
 
-// Define the structure of the book object  
-export interface Book {  
+export interface Shelf {  
+  wantToRead: Book[];  
+  currentlyReading: Book[];  
+  read: Book[];  
+}
+export interface User {  
   id: string;  
-  volumeInfo: VolumeInfo;  
+  username: string;  
+  password: string;
 }  

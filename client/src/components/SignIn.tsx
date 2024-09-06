@@ -19,9 +19,8 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {  
     if (user) {  
-      console.log(user);
-      navigate("/bookshelf"); 
-      console.log("should be redirected to dashboard"); 
+      navigate("/bookshelf/");  
+      console.log("User signed in:", user);  
       setError(null);  
     }  
   }, [user, navigate]);  

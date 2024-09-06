@@ -77,10 +77,12 @@ router
 router
   .route("/")
   .get((req: Request, res: Response) => {
+    console.log("bookshelf router")
     const { userId } = req.body;
     // @ts-ignore
     const bookshelf = Bookshelves.getBookshelf(userId);
     res.send({ books: bookshelf });
+    
   })
   .all(methodNotAllowedError);
 

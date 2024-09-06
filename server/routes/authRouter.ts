@@ -49,6 +49,10 @@ router
       return res.status(200).send({  
         message: "You did it! Success!",  
         token: generateAccessToken(userId),  
+        user: {
+          id: user.id.toString(),
+          username: user.username,
+        }
       });  
     }, 500);  
   })  

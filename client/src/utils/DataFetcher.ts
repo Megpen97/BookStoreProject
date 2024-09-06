@@ -3,9 +3,9 @@
 import axios from 'axios';  
 
 class DataFetcher {  
-  static async fetchData(): Promise<any> {  
+  static async fetchData(): Promise<string> {  
     try {  
-      const response = await axios.get('http://localhost:3000/api/');  
+      const response = await axios.get('/api/bookshelf');  
       return response.data;  
     } catch (error) {  
       console.error('Error fetching data:', error);  
