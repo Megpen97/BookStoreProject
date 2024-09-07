@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';  
 import useAuth from '../hooks/useAuth';  
 import { Shelf, Book } from '../types/DataTypes';  
+import { Link } from 'react-router-dom';
+import { Tooltip, OverlayTrigger } from'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';  
 
 const Bookshelf: React.FC = () => {  
@@ -49,39 +52,69 @@ const Bookshelf: React.FC = () => {
   if (error) return <div>{error}</div>;  
 
   const renderBooksByShelf = (shelf: keyof Shelf) => {  
-    return books[shelf].map((book: Book) => (  
-      <li key={book.id}>  
-      {/* left off here */}
-        {/* <h3>{book.volumeInfo.title}</h3>  
-        <p>{book.volumeInfo.description}</p>  
-        <img src={book.volumeInfo.imageLinks?.thumbnail} alt={`${book.volumeInfo.title} cover`} />   */}
-      </li>  
-    ));  
-  };  
+    return (  
+      <div className='container'>  
+        <div className='row'>  
+          {books[shelf].map((book: Book) => (  
+            <div className='col-md-3' key={book.id}>
+            <Link to={`/book/${book.id}`}> 
+              <div className="card" >   
+                {/* on click, navigate to book details */}
+                <div className='card-body shadow'>  
+                  <img src={book.imageLinks?.thumbnail} alt={`${book.title}`} className='card-img-top'/>  
+                </div>  
+              </div>  
+            </Link>
+            <div>
+              <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`tooltip-${book.id}`}>
+                  <strong>{book.title}</strong>
+                </Tooltip>
+              }
+              >
+              <p className='m-2 fw-bold text-truncate'>{book.title}</p> 
+              </OverlayTrigger>
+            </div>
+              
+              <p className='m-2 text-truncate'>{book.authors?.join(", ")}</p> 
+            </div>  
+          ))}  
+        </div>  
+      </div>  
+    );  
+  };
 
   return (  
-    <div>  
-      <h1>Bookshelf</h1>  
-      <div>  
-        <h2>Welcome!</h2>  
-        <button onClick={signOut}>Sign Out</button>  
-      </div>  
-      <div>  
-        <h2>Currently Reading</h2>  
+    <div className='bg-white'>  
+        <div className='navbar shadow-sm bg-success d-flex justify-content-between'>  
+          <Link to={'/bookshelf'}>  
+            <button className='navbar-brand mx-5 rounded text-white m-3 shadow-sm'>Bookshelf</button>  
+          </Link>  
+          <div className='d-flex ms-auto align-items-center'>  
+            <Link to={'/search'} style={{ cursor: 'pointer', fontSize: '25px' }}    className='navbar-item mx-2 rounded bg-secondary shadow-sm text-white m-3 d-flex align-items-center bg-success'>  
+              <FaSearch className='me-2 bg-success'/>
+            </Link>  
+            <button className='navbar-item mx-2 rounded bg-danger shadow-sm' onClick={signOut}>Sign Out</button>  
+          </div>  
+        </div>   
+      <div className=''>  
+        <h2 className='m-5 border p-2 bg-light rounded text-center shadow-sm'>Currently Reading</h2>  
         <ul>  
           {renderBooksByShelf('currentlyReading')}  
         </ul>  
       </div>  
-      <div>  
-        <h2>Want to Read</h2>  
+      <div className=''>  
+        <h2 className='m-5 border p-2 bg-light rounded text-center shadow-sm'>Want to Read</h2>  
         <ul>  
-          {/* {renderBooksByShelf('wantToRead')}   */}
+          {renderBooksByShelf('wantToRead')}  
         </ul>  
       </div>  
-      <div>  
-        <h2>Read</h2>  
+      <div className=''>  
+        <h2 className='m-5 border p-2 bg-light rounded text-center shadow-sm'>Read</h2>  
         <ul>  
-          {/* {renderBooksByShelf('read')}   */}
+          {renderBooksByShelf('read')}  
         </ul>  
       </div>  
     </div>  

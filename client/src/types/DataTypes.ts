@@ -1,25 +1,6 @@
 export interface Book {  
   id: string;  
-  shelf: Shelf[];  
-  volumeInfo: VolumeInfo;  
-}  
-export interface IndustryIdentifier {  
-  type: string;  
-  identifier: string;  
-}
-
-export interface ImageLinks {  
-  smallThumbnail?: string;  
-  thumbnail?: string;  
-}
-
-export interface Dimensions {  
-  height: string;  
-  width: string;  
-  thickness: string;  
-}
-
-export interface VolumeInfo {  
+  shelf: 'wantToRead' | 'currentlyReading' | 'read';  // Changed this to a string for easier handling  
   title: string;  
   subtitle?: string;  
   authors?: string[];  
@@ -40,15 +21,31 @@ export interface VolumeInfo {
   infoLink?: string;  
   canonicalVolumeLink?: string;  
   dimensions?: Dimensions;  
-}
+}  
+
+export interface IndustryIdentifier {  
+  type: string;  
+  identifier: string;  
+}  
+
+export interface ImageLinks {  
+  smallThumbnail?: string;  
+  thumbnail?: string;  
+}  
+
+export interface Dimensions {  
+  height: string;  
+  width: string;  
+  thickness: string;  
+}  
+export interface User {  
+  id: string;  
+  username: string;  
+  password: string;  
+}  
 
 export interface Shelf {  
   wantToRead: Book[];  
   currentlyReading: Book[];  
   read: Book[];  
 }
-export interface User {  
-  id: string;  
-  username: string;  
-  password: string;
-}  
