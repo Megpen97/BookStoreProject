@@ -1,0 +1,80 @@
+.book-details-container {
+  padding-bottom: 2rem;
+}
+
+.book-card {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.book-card:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.book-cover-section {
+  border-right: 1px solid rgba(0,0,0,0.1);
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.book-cover-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.book-cover {
+  transition: transform 0.3s ease-in-out;
+  transform: rotateY(0deg);
+}
+
+.book-cover:hover {
+  transform: rotateY(10deg) scale(1.02);
+}
+
+.nav-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+}
+
+.shelf-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.shelf-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.remove-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.remove-button:hover {
+  transform: translateY(-2px);
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Add smooth transitions for dropdown items */
+.dropdown-item {
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Add a subtle hover effect for badges */
+.badge {
+  transition: transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: translateY(-1px);
+}
+
+/* Add a subtle scale effect for the book stats */
+.text-primary {
+  transition: transform 0.2s ease;
+}
+
+.text-primary:hover {
+  transform: scale(1.1);
+} 
