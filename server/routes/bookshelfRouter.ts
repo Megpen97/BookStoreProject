@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import axios from "axios";
 
 import Bookshelves from "../models/Bookshelves";
+import { volumeUrl } from "../services/googleBooks";
 
 import methodNotAllowedError from "../errors/methodNotAllowed";
 import { getUserId, auth } from "../middlewares/auth";
@@ -32,7 +33,7 @@ router
       return res.send({ books: bookshelf });
     } catch (err) {
       axios
-        .get(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
+        .get(volumeUrl(bookId))
         .then((response) => {
           const { id, volumeInfo } = response.data;
           // @ts-ignore
@@ -76,13 +77,15 @@ router
 
 router
   .route("/")
-  .get((req: Request, res: Response) => {
-    console.log("bookshelf router")
+  .get(async (req: Request, res: Response) => {
+    // Retries the Google Books seed if the boot-time attempt was rate-limited.
+    await Bookshelves.ensureSeeded().catch(() => {
+      // Non-fatal: an empty shelf is a better answer than an error page.
+    });
+
     const { userId } = req.body;
-    // @ts-ignore
     const bookshelf = Bookshelves.getBookshelf(userId);
     res.send({ books: bookshelf });
-    
   })
   .all(methodNotAllowedError);
 

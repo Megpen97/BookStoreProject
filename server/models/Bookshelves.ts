@@ -11,6 +11,8 @@ import {
 } from "../assets/starterBookshelves";
 
 let shelves = [] as IBook[];
+let seeded = false;
+let seedingInFlight: Promise<void> | null = null;
 
 type ShelfTypes = "wantToRead" | "currentlyReading" | "read";
 
@@ -115,8 +117,32 @@ class Bookshelves {
     Bookshelves.insertBook(userId, bookId, volumeInfo, shelf);
   }
   static async initialBookshelf(): Promise<void> {
-    await setStartBookshelves();
-    shelves = getStartBookshelves();
+    const { loaded } = await setStartBookshelves();
+    if (loaded === 0) return;
+
+    // Don't clobber books a signed-in user already added while unseeded.
+    if (shelves.length === 0) {
+      shelves = getStartBookshelves();
+    }
+    seeded = true;
+  }
+
+  /**
+   * Seeds the shelves if that hasn't succeeded yet, and is safe to call on
+   * every request. Google rate-limits by IP, so the boot-time attempt can come
+   * back empty; retrying here lets the shelves fill in once the limit clears,
+   * with no restart or redeploy. Concurrent callers share one in-flight
+   * request rather than each firing their own.
+   */
+  static async ensureSeeded(): Promise<void> {
+    if (seeded) return;
+
+    if (!seedingInFlight) {
+      seedingInFlight = Bookshelves.initialBookshelf().finally(() => {
+        seedingInFlight = null;
+      });
+    }
+    await seedingInFlight;
   }
   static refreshBookshelf(): void {
     shelves = getStartBookshelves();

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import axios from "axios";
 import { IVolume } from "../models/Bookshelves";
 import { createDebouncer } from "../debouncer";
+import { searchUrl } from "../services/googleBooks";
 
 import methodNotAllowedError from "../errors/methodNotAllowed";
 import { title } from "process";
@@ -28,9 +29,7 @@ router
 
     try {
       const response = await debounce(() => {
-        return axios.get(
-          `https://www.googleapis.com/books/v1/volumes?q=${bookTitle}&maxAllowedMaturityRating=not-mature&maxResults=20&orderBy=relevance&printType=books&fields=items(id%2CvolumeInfo)%2CtotalItems`
-        );
+        return axios.get(searchUrl(bookTitle));
       });
       // @ts-ignore
       if (response.data.totalItems === 0) {

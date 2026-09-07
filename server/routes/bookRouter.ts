@@ -3,6 +3,7 @@ import axios from "axios";
 import Bookshelves from "../models/Bookshelves";
 import { getUserId } from "../middlewares/auth";
 import { stripHtml } from "string-strip-html";
+import { volumeUrl } from "../services/googleBooks";
 
 import methodNotAllowedError from "../errors/methodNotAllowed";
 
@@ -15,13 +16,13 @@ router
     const { userId } = req.body;
 
     axios
-      .get(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
+      .get(volumeUrl(bookId))
       .then((response) => {
         // @ts-ignore
         const shelf = Bookshelves.findShelfForBook(userId, bookId);
-        const description = stripHtml(
-          response.data.volumeInfo?.description
-        ).result;
+        // stripHtml throws on undefined, and plenty of volumes have no description.
+        const rawDescription = response.data.volumeInfo?.description;
+        const description = rawDescription ? stripHtml(rawDescription).result : "";
         const book = {
           id: bookId,
           ...response.data.volumeInfo,

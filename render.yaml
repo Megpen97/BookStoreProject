@@ -28,3 +28,10 @@ services:
         value: 20.14
       - key: NODE_ENV
         value: "production"
+      # Optional but recommended. Without a key, Google Books requests are
+      # unauthenticated and share a low per-IP quota with every other free
+      # Render app, which causes intermittent 429 "Too Many Requests" errors.
+      # sync: false keeps the secret out of git - set the value in the Render
+      # dashboard under Environment.
+      - key: GOOGLE_BOOKS_API_KEY
+        sync: false
